@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medellín · Portfolio · Laura Yissel Leaño Fajardo</title>
+<style>
+  :root{--bg:#07120d;--accent:#2ecc71;--glow:rgba(46,204,113,.45);--text:#e9f7ef;--muted:#8fae9d;--card:rgba(255,255,255,.04);--border:rgba(46,204,113,.18);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;overflow:hidden;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:radial-gradient(circle at 20% 20%, #0e241a 0%, var(--bg) 55%, #03080a 100%);color:var(--text);}
+  .bg-orbs{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;}
+  .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:float 18s ease-in-out infinite;}
+  .orb.o1{width:520px;height:520px;background:#2ecc71;top:-180px;left:-140px;}
+  .orb.o2{width:420px;height:420px;background:#1abc9c;bottom:-160px;right:-120px;animation-delay:-6s;}
+  .orb.o3{width:360px;height:360px;background:#3498db;top:40%;left:55%;animation-delay:-12s;opacity:.2;}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(60px,-50px) scale(1.08);}66%{transform:translate(-40px,40px) scale(.95);}}
+  .progress{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.05);z-index:50;}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#1abc9c);box-shadow:0 0 12px var(--glow);transition:width .5s;}
+  .deck{position:relative;width:100%;height:100%;z-index:1;}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:6vh 7vw;opacity:0;visibility:hidden;transform:scale(.97) translateY(18px);transition:opacity .55s, transform .55s, visibility .55s;overflow-y:auto;}
+  .slide.active{opacity:1;visibility:visible;transform:scale(1) translateY(0);}
+  .anim{opacity:0;transform:translateY(22px);}
+  .slide.active .anim{animation:riseIn .75s cubic-bezier(.22,1,.36,1) forwards;animation-delay:var(--d,0s);}
+  @keyframes riseIn{to{opacity:1;transform:translateY(0);}}
+  .eyebrow{display:inline-block;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);padding:.45rem 1rem;border:1px solid var(--border);border-radius:999px;background:rgba(46,204,113,.06);margin-bottom:1.4rem;}
+  h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;font-weight:800;letter-spacing:-.02em;}
+  h1 .grad{background:linear-gradient(120deg,#2ecc71,#1abc9c 50%,#3498db);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  h2{font-size:clamp(1.8rem,3.6vw,2.9rem);font-weight:700;margin-bottom:.6rem;}
+  h2 .accent{color:var(--accent);}
+  .subtitle{color:var(--muted);font-size:clamp(.95rem,1.4vw,1.1rem);max-width:52ch;line-height:1.6;}
+  .center{text-align:center;align-items:center;max-width:1000px;display:flex;flex-direction:column;}
+  .grid{display:grid;gap:1.6rem;width:100%;max-width:1100px;}
+  .grid.two{grid-template-columns:1.15fr 1fr;}
+  .grid.list{grid-template-columns:1fr;gap:1rem;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.5rem 1.7rem;position:relative;overflow:hidden;transition:.3s;}
+  .card:hover{transform:translateY(-4px);border-color:rgba(46,204,113,.45);box-shadow:0 18px 40px -20px var(--glow);}
+  .card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--accent),transparent);opacity:.7;}
+  .card h3{font-size:1.05rem;margin-bottom:.55rem;color:var(--accent);}
+  .card p{font-size:.95rem;line-height:1.65;opacity:.92;}
+  .card .tag{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;display:block;}
+  .card-img{width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:1rem;border:1px solid var(--border);}
+  .fact{border:1px dashed rgba(46,204,113,.35);background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(26,188,156,.03));border-radius:16px;padding:1.2rem 1.4rem;display:flex;gap:1rem;align-items:flex-start;}
+  .fact .icon{font-size:1.6rem;line-height:1;}
+  .fact strong{color:var(--accent);display:block;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.35rem;}
+  .fact p{font-size:.95rem;line-height:1.6;}
+  .cover-meta{margin-top:3rem;display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;color:var(--muted);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;}
+  .cover-meta span{display:flex;align-items:center;gap:.5rem;}
+  .dot-s{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--glow);}
+  .author-name{font-size:1.1rem;letter-spacing:.15em;color:var(--accent);margin-top:.5rem;text-transform:uppercase;}
+  .aspect-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.6rem;flex-wrap:wrap;}
+  .aspect-num{font-size:.85rem;font-weight:700;color:var(--accent);border:1px solid var(--border);padding:.35rem .8rem;border-radius:8px;background:rgba(46,204,113,.06);letter-spacing:.1em;}
+  .aspect-icon{font-size:2.4rem;}
+
+  /* ══════════ REPRODUCTOR PERSONALIZADO ══════════ */
+  .audio-box{background:linear-gradient(135deg,rgba(46,204,113,.10),rgba(26,188,156,.03));border:1px solid var(--border);border-radius:16px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.7rem;transition:.3s;}
+  .audio-box:hover{border-color:rgba(46,204,113,.45);box-shadow:0 12px 30px -18px var(--glow);}
+  .audio-box.playing{border-color:var(--accent);box-shadow:0 0 22px -8px var(--glow);}
+  .audio-header{display:flex;align-items:center;gap:.7rem;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);}
+  .audio-header .rec-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--glow);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+  .audio-controls{display:flex;align-items:center;gap:.9rem;}
+  .play-btn{flex-shrink:0;width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent),#1abc9c);color:#07120d;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 18px -6px var(--glow);transition:.2s;}
+  .play-btn:hover{transform:scale(1.08);box-shadow:0 8px 24px -6px var(--glow);}
+  .play-btn:active{transform:scale(.95);}
+  .play-btn svg{width:18px;height:18px;fill:#07120d;}
+  .audio-info{flex:1;display:flex;flex-direction:column;gap:.3rem;min-width:0;}
+  .audio-title{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .audio-time{font-size:.72rem;color:var(--muted);letter-spacing:.08em;font-variant-numeric:tabular-nums;}
+  .audio-progress{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;cursor:pointer;}
+  .audio-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#1abc9c);border-radius:10px;transition:width .1s linear;}
+  .waveform{display:flex;align-items:center;gap:3px;height:20px;opacity:.4;transition:opacity .3s;}
+  .audio-box.playing .waveform{opacity:1;}
+  .waveform span{display:block;width:3px;height:6px;background:var(--accent);border-radius:2px;}
+  .audio-box.playing .waveform span{animation:wave 1s ease-in-out infinite;}
+  .waveform span:nth-child(1){animation-delay:0s;}.waveform span:nth-child(2){animation-delay:.1s;}.waveform span:nth-child(3){animation-delay:.2s;}.waveform span:nth-child(4){animation-delay:.3s;}.waveform span:nth-child(5){animation-delay:.4s;}.waveform span:nth-child(6){animation-delay:.5s;}.waveform span:nth-child(7){animation-delay:.6s;}.waveform span:nth-child(8){animation-delay:.7s;}
+  @keyframes wave{0%,100%{height:6px;opacity:.6;}50%{height:20px;opacity:1;}}
+
+  .refs{max-width:950px;width:100%;max-height:72vh;overflow-y:auto;padding-right:.5rem;}
+  .refs h3{color:var(--accent);font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;margin:1.4rem 0 .6rem;}
+  .refs ul{list-style:none;display:grid;gap:.5rem;}
+  .refs li{font-size:.88rem;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.5;}
+  .refs li::before{content:"▸";position:absolute;left:0;color:var(--accent);}
+  .nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.2rem;z-index:60;background:rgba(7,18,13,.7);backdrop-filter:blur(14px);border:1px solid var(--border);padding:.6rem 1rem;border-radius:999px;}
+  .nav button{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:rgba(46,204,113,.08);color:var(--text);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.25s;}
+  .nav button:hover{background:var(--accent);color:#07120d;transform:scale(1.08);box-shadow:0 0 18px var(--glow);}
+  .nav button:disabled{opacity:.3;cursor:not-allowed;}
+  .dots{display:flex;gap:.5rem;}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18);border:none;cursor:pointer;transition:.3s;}
+  .dot.active{background:var(--accent);width:26px;border-radius:5px;box-shadow:0 0 10px var(--glow);}
+  .counter{position:fixed;top:18px;right:24px;font-size:.8rem;color:var(--muted);letter-spacing:.2em;z-index:60;}
+  .counter b{color:var(--accent);}
+  .hint{position:fixed;bottom:22px;left:22px;font-size:.72rem;color:var(--muted);letter-spacing:.12em;z-index:60;opacity:.7;transition:opacity .6s;}
+  .hint.hide{opacity:0;}
+  @media (max-width:820px){
+    .grid.two{grid-template-columns:1fr;}.slide{padding:5vh 6vw 12vh;}
+    .nav{bottom:14px;gap:.7rem;padding:.5rem .7rem;}.nav button{width:38px;height:38px;}
+    .counter{top:14px;right:16px;}.hint{display:none;}.card-img{height:110px;}
+  }
+  @media (max-width:480px){
+    h1{font-size:2rem;}.card{padding:1.1rem 1.2rem;}.dots{display:none;}.card-img{height:90px;}
+    .play-btn{width:40px;height:40px;}.waveform{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="progress"><div class="progress-fill" id="progress"></div></div>
+<div class="counter"><b id="cur">01</b> / <span id="tot">09</span></div>
+
+<main class="deck" id="deck">
+
+  <section class="slide active">
+    <div class="center">
+      <span class="eyebrow anim" style="--d:.1s">Digital Portfolio · English</span>
+      <h1 class="anim" style="--d:.25s">MEDELLÍN<br><span class="grad">How Gentrification<br>Is Changing My City</span></h1>
+      <p class="author-name anim" style="--d:.35s">Laura Yissel Leaño Fajardo</p>
+      <p class="subtitle anim" style="--d:.45s;margin-top:1.6rem;">Medellín is known as "the city of the eternal spring." But in the last few years, something has been changing — and not everyone is happy about it.</p>
+      <div class="cover-meta anim" style="--d:.65s">
+        <span><i class="dot-s"></i> Colombia</span>
+        <span><i class="dot-s"></i> 5 Topics</span>
+        <span><i class="dot-s"></i> 2025 – 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <span class="eyebrow anim" style="--d:.1s">Introduction</span>
+        <h2 class="anim" style="--d:.2s">Why <span class="accent">Medellín</span>?</h2>
+        <p class="subtitle anim" style="--d:.3s">I chose Medellín because it's my country's most famous example of urban transformation. The city has changed a lot since the 90s — it's safer, greener and more modern than before.</p>
+        <p class="subtitle anim" style="--d:.4s;margin-top:1rem;">But all this progress has a darker side. Rents are getting higher, foreigners are buying more property, and many local families are being pushed to the edges of the city. This process is called <strong style="color:var(--accent)">gentrification</strong>.</p>
+        <p class="subtitle anim" style="--d:.45s;margin-top:1rem;font-style:italic;font-size:.9rem;">Note: Even though this was a team activity, I did it on my own.</p>
+      </div>
+      <div class="grid list">
+        <div class="card anim" style="--d:.5s">
+          <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Vista_nocturna_de_Medell%C3%ADn_desde_un_edificio_en_Santa_M%C3%B3nica,_2022.jpg" alt="Medellín">
+          <span class="tag">What is gentrification?</span>
+          <p>It's when a poor or working-class neighborhood becomes more attractive to richer people. Prices go up, and original residents often can't afford to stay.</p>
+        </div>
+        <div class="card anim" style="--d:.6s">
+          <span class="tag">My approach</span>
+          <p>I looked at five aspects of the city: economy, environment, culture, education and health. All of them connect to the same problem: <strong style="color:var(--accent)">who gets to live in the city?</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <div class="aspect-head anim" style="--d:.1s"><span class="aspect-icon">💼</span><span class="aspect-num">01</span></div>
+        <h2 class="anim" style="--d:.2s">Economy<span class="accent">.</span></h2>
+        <p class="subtitle anim" style="--d:.3s">The city is getting richer, but living here is getting harder.</p>
+        <div class="grid list" style="margin-top:1.6rem;">
+          <div class="card anim" style="--d:.4s">
+            <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Edificios_en_El_Poblado_o.jpg" alt="El Poblado">
+            <h3>Good news first</h3>
+            <p>Medellín has become popular with digital nomads and foreign investors. Real estate, tourism and restaurants have grown. New buildings are going to keep appearing, especially in El Poblado.</p>
+          </div>
+          <div class="card anim" style="--d:.5s">
+            <h3>But here's the problem</h3>
+            <p>Rents are getting more and more expensive. One out of four new apartments is bought by a foreigner. The price per square meter has grown almost <strong style="color:var(--accent)">17%</strong> between 2024 and 2025 — way faster than salaries.</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid list">
+        <div class="audio-box anim" style="--d:.55s" data-audio="audio-economy.mp3" data-title="The city is getting richer">
+          <div class="audio-header"><span class="rec-dot"></span> Audio · Economy</div>
+          <div class="audio-controls">
+            <button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="audio-info">
+              <div class="audio-title">The city is getting richer</div>
+              <div class="audio-time">0:00 / 0:00</div>
+            </div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="audio-progress"><div class="audio-progress-fill"></div></div>
+        </div>
+        <div class="fact anim" style="--d:.65s">
+          <div class="icon">✨</div>
+          <div><strong>Interesting fact</strong>
+          <p>Airbnb hosts in Medellín made around <strong>US$133 million in 2025</strong>. The city now has more Airbnb listings per person than Madrid or Athens.</p></div>
+        </div>
+        <div class="card anim" style="--d:.75s">
+          <span class="tag">My opinion</span>
+          <p>The city is richer than before, but less affordable for the people born here. If the government doesn't regulate short-term rentals soon, things are going to get worse.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <div class="aspect-head anim" style="--d:.1s"><span class="aspect-icon">🌿</span><span class="aspect-num">02</span></div>
+        <h2 class="anim" style="--d:.2s">Environment<span class="accent">.</span></h2>
+        <p class="subtitle anim" style="--d:.3s">Green corridors — but greener for whom?</p>
+        <div class="grid list" style="margin-top:1.6rem;">
+          <div class="card anim" style="--d:.4s">
+            <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Bosque_Parque_Arv%C3%AD.JPG" alt="Parque Arví">
+            <h3>An amazing project</h3>
+            <p>The city has planted thirty green corridors along roads and rivers. They've helped cool down some areas by up to <strong style="color:var(--accent)">10 degrees</strong>. The project has also created over 700 jobs.</p>
+          </div>
+          <div class="card anim" style="--d:.5s">
+            <h3>The unexpected effect</h3>
+            <p>When a neighborhood becomes greener and prettier, property values go up — and long-time residents may not be able to afford living there. This is called "green gentrification."</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid list">
+        <div class="audio-box anim" style="--d:.55s" data-audio="audio-environment.mp3" data-title="Green corridors">
+          <div class="audio-header"><span class="rec-dot"></span> Audio · Environment</div>
+          <div class="audio-controls">
+            <button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="audio-info">
+              <div class="audio-title">Green corridors and green gentrification</div>
+              <div class="audio-time">0:00 / 0:00</div>
+            </div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="audio-progress"><div class="audio-progress-fill"></div></div>
+        </div>
+        <div class="fact anim" style="--d:.65s">
+          <div class="icon">🌱</div>
+          <div><strong>Interesting fact</strong>
+          <p>Unlike most cities, Medellín managed to block displacement in the Green Corridors areas. Good policies made the difference.</p></div>
+        </div>
+        <div class="card anim" style="--d:.75s">
+          <span class="tag">My opinion</span>
+          <p>If other cities copy this model, they'll be able to grow without pushing people away.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <div class="aspect-head anim" style="--d:.1s"><span class="aspect-icon">🎭</span><span class="aspect-num">03</span></div>
+        <h2 class="anim" style="--d:.2s">Culture<span class="accent">.</span></h2>
+        <p class="subtitle anim" style="--d:.3s">When a city becomes prettier for tourists, it can feel less like home for locals.</p>
+        <div class="grid list" style="margin-top:1.6rem;">
+          <div class="card anim" style="--d:.4s">
+            <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Graffitour,_Medell%C3%ADn_01.jpg" alt="Comuna 13">
+            <h3>Our roots</h3>
+            <p>The Feria de las Flores has been going on since 1957. Places like Plaza Botero and Museo de Antioquia show how much the city cares about art.</p>
+          </div>
+          <div class="card anim" style="--d:.5s">
+            <h3>The loss</h3>
+            <p>In El Poblado and Manila, old houses are being torn down to build modern hotels. Someone even said that in some streets of Manila, only English is spoken now.</p>
+          </div>
+          <div class="card anim" style="--d:.6s">
+            <h3>The resistance</h3>
+            <p>In Comuna 13, hip-hop artists use music to talk about these problems. As Alcolirykoz raps: <em>"The sound of gentrification is silence."</em></p>
+          </div>
+        </div>
+      </div>
+      <div class="grid list">
+        <div class="audio-box anim" style="--d:.65s" data-audio="audio-culture.mp3" data-title="Identity for sale">
+          <div class="audio-header"><span class="rec-dot"></span> Audio · Culture</div>
+          <div class="audio-controls">
+            <button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="audio-info">
+              <div class="audio-title">Identity for sale</div>
+              <div class="audio-time">0:00 / 0:00</div>
+            </div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="audio-progress"><div class="audio-progress-fill"></div></div>
+        </div>
+        <div class="fact anim" style="--d:.75s">
+          <div class="icon">🎨</div>
+          <div><strong>Interesting fact</strong>
+          <p>Comuna 13 used to be one of the most dangerous areas of Medellín. Now it's a colorful open-air gallery full of tourists.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <div class="aspect-head anim" style="--d:.1s"><span class="aspect-icon">🎓</span><span class="aspect-num">04</span></div>
+        <h2 class="anim" style="--d:.2s">Education<span class="accent">.</span></h2>
+        <p class="subtitle anim" style="--d:.3s">The silent exodus of students to the outskirts.</p>
+        <div class="grid list" style="margin-top:1.6rem;">
+          <div class="card anim" style="--d:.4s">
+            <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Biblioteca_Espa%C3%B1a(1)-Medellin.JPG" alt="Biblioteca España">
+            <h3>A real priority</h3>
+            <p>Education has always mattered a lot in Medellín. Programs like "Medellín, la más educada" helped the city change its image.</p>
+          </div>
+          <div class="card anim" style="--d:.5s">
+            <h3>The new challenge</h3>
+            <p>As rents get more expensive, poorer families are being pushed to the outskirts. In some areas, high school enrollment has fallen by more than <strong style="color:var(--accent)">11%</strong>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid list">
+        <div class="audio-box anim" style="--d:.55s" data-audio="audio-education.mp3" data-title="The silent exodus">
+          <div class="audio-header"><span class="rec-dot"></span> Audio · Education</div>
+          <div class="audio-controls">
+            <button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="audio-info">
+              <div class="audio-title">The silent exodus</div>
+              <div class="audio-time">0:00 / 0:00</div>
+            </div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="audio-progress"><div class="audio-progress-fill"></div></div>
+        </div>
+        <div class="fact anim" style="--d:.65s">
+          <div class="icon">📚</div>
+          <div><strong>Interesting fact</strong>
+          <p>Even though Medellín's population is getting older, more adults are signing up for flexible education programs.</p></div>
+        </div>
+        <div class="card anim" style="--d:.75s">
+          <span class="tag">My opinion</span>
+          <p>If Medellín wants to remain "the most educated," it has to make education accessible for everyone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid two">
+      <div>
+        <div class="aspect-head anim" style="--d:.1s"><span class="aspect-icon">🩺</span><span class="aspect-num">05</span></div>
+        <h2 class="anim" style="--d:.2s">Health<span class="accent">.</span></h2>
+        <p class="subtitle anim" style="--d:.3s">Gentrification hurts more than your wallet — it also affects your mind.</p>
+        <div class="grid list" style="margin-top:1.6rem;">
+          <div class="card anim" style="--d:.4s">
+            <img class="card-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Cl%C3%ADnica_del_Prado.JPG" alt="Clínica">
+            <h3>More than hospitals</h3>
+            <p>Medellín has a good healthcare system with modern hospitals. But health is also about feeling safe and at home in your neighborhood.</p>
+          </div>
+          <div class="card anim" style="--d:.5s">
+            <h3>The hidden wound</h3>
+            <p>Families forced to leave their neighborhoods often feel depressed, anxious and tired. They don't trust institutions anymore.</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid list">
+        <div class="audio-box anim" style="--d:.55s" data-audio="audio-health.mp3" data-title="The hidden wounds">
+          <div class="audio-header"><span class="rec-dot"></span> Audio · Health</div>
+          <div class="audio-controls">
+            <button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="audio-info">
+              <div class="audio-title">The hidden wounds of displacement</div>
+              <div class="audio-time">0:00 / 0:00</div>
+            </div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="audio-progress"><div class="audio-progress-fill"></div></div>
+        </div>
+        <div class="fact anim" style="--d:.65s">
+          <div class="icon">💭</div>
+          <div><strong>Interesting fact</strong>
+          <p>Some researchers call this a <strong>"multidimensional violence"</strong> because it affects people psychologically, socially and even physically.</p></div>
+        </div>
+        <div class="card anim" style="--d:.75s">
+          <span class="tag">My opinion</span>
+          <p>Medellín is going to need to include mental health support in its urban planning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="center">
+      <span class="eyebrow anim" style="--d:.1s">Conclusion</span>
+      <h2 class="anim" style="--d:.2s">A price of progress — <span class="accent">or a choice?</span></h2>
+      <p class="subtitle anim" style="--d:.35s;margin-top:.8rem;max-width:60ch;">After researching all these aspects, I don't think gentrification is simply good or bad. It's more complicated than that.</p>
+      <div class="grid two anim" style="--d:.5s;margin-top:2.4rem;">
+        <div class="card"><h3>The risk</h3><p>If nothing changes, Medellín will become more unequal, less authentic and less welcoming for the people who built it.</p></div>
+        <div class="card"><h3>The opportunity</h3><p>With inclusive policies — like the Green Corridors — the city can grow and protect its people at the same time.</p></div>
+      </div>
+      <p class="anim" style="--d:.7s;margin-top:2.4rem;color:var(--accent);font-style:italic;font-size:1.05rem;">"A city is not its buildings. A city is its people."</p>
+      <p class="anim" style="--d:.85s;margin-top:1rem;color:var(--muted);font-size:.85rem;letter-spacing:.1em;">— Laura Yissel Leaño Fajardo</p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="refs">
+      <span class="eyebrow anim" style="--d:.1s">References</span>
+      <h2 class="anim" style="--d:.2s">Sources <span class="accent">I used</span></h2>
+      <h3 class="anim" style="--d:.3s">Economy</h3>
+      <ul class="anim" style="--d:.35s">
+        <li>The Real Deal. (2025). <em>Colombian developers are pivoting to short-term rentals for digital nomads.</em></li>
+        <li>Información y Medios UdeMedellín. (2025). <em>Costo de vida alto en Medellín requiere resolver el déficit de vivienda.</em></li>
+        <li>Clove. (2026). <em>Medellín Is Now Antioquia's Airbnb Capital.</em></li>
+      </ul>
+      <h3 class="anim" style="--d:.45s">Environment</h3>
+      <ul class="anim" style="--d:.5s">
+        <li>MDPI. <em>The Green Corridors project (Medellín, Colombia).</em></li>
+        <li>LinkedIn. (2026). <em>Medellín's Green Corridors and Resilient Equity.</em></li>
+      </ul>
+      <h3 class="anim" style="--d:.6s">Culture</h3>
+      <ul class="anim" style="--d:.65s">
+        <li>Infobae. (2025). <em>'Influencer' descubrió el barrio de los extranjeros en Medellín.</em></li>
+        <li>Universidad de Medellín. (2025). <em>Estudio revela cómo AlcolirykoZ denuncia la gentrificación.</em></li>
+      </ul>
+      <h3 class="anim" style="--d:.75s">Education</h3>
+      <ul class="anim" style="--d:.8s">
+        <li>Minuto30. (2025). <em>Las grietas invisibles de Medellín.</em></li>
+        <li>La Silla Vacía. (2025). <em>Medellín creció, pero con más desigualdad.</em></li>
+      </ul>
+      <h3 class="anim" style="--d:.9s">Health</h3>
+      <ul class="anim" style="--d:.95s">
+        <li>Universidad de San Buenaventura. (2026). <em>¿La ciudad para quién?</em></li>
+        <li>Universidad de Antioquia. (2022). <em>La ciudad y la crisis de los sentires.</em></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<div class="hint" id="hint">← → para navegar</div>
+
+<nav class="nav">
+  <button id="prev">‹</button>
+  <div class="dots" id="dots"></div>
+  <button id="next">›</button>
+</nav>
+
+<script>
+var slides = document.querySelectorAll('.slide');
+var dotsWrap = document.getElementById('dots');
+var prevBtn = document.getElementById('prev');
+var nextBtn = document.getElementById('next');
+var progress = document.getElementById('progress');
+var curEl = document.getElementById('cur');
+var totEl = document.getElementById('tot');
+var hint = document.getElementById('hint');
+var current = 0;
+var total = slides.length;
+totEl.textContent = ('0' + total).slice(-2);
+
+for (var i = 0; i < total; i++) {
+  (function(idx){
+    var b = document.createElement('button');
+    b.className = 'dot' + (idx === 0 ? ' active' : '');
+    b.addEventListener('click', function(){ goTo(idx); });
+    dotsWrap.appendChild(b);
+  })(i);
+}
+var dots = document.querySelectorAll('.dot');
+
+function updateUI(){
+  for (var i = 0; i < dots.length; i++) dots[i].className = 'dot' + (i === current ? ' active' : '');
+  progress.style.width = ((current + 1) / total * 100) + '%';
+  curEl.textContent = ('0' + (current + 1)).slice(-2);
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === total - 1;
+}
+
+function pauseAllAudios(){ document.querySelectorAll('audio').forEach(function(a){ a.pause(); }); }
+
+function goTo(index){
+  if (index < 0 || index >= total || index === current) return;
+  pauseAllAudios();
+  slides[current].className = 'slide';
+  current = index;
+  slides[current].className = 'slide active';
+  slides[current].querySelectorAll('.anim').forEach(function(el){
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
+  updateUI();
+  if (current > 0) hint.classList.add('hide');
+}
+
+function next(){ goTo(current + 1); }
+function prev(){ goTo(current - 1); }
+prevBtn.addEventListener('click', prev);
+nextBtn.addEventListener('click', next);
+
+document.addEventListener('keydown', function(e){
+  var tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+});
+
+function formatTime(sec){
+  if (!isFinite(sec)) return '0:00';
+  var m = Math.floor(sec / 60);
+  var s = Math.floor(sec % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+document.querySelectorAll('.audio-box').forEach(function(box){
+  var src = box.dataset.audio;
+  var playBtn = box.querySelector('.play-btn');
+  var iconSVG = playBtn.querySelector('svg');
+  var timeEl = box.querySelector('.audio-time');
+  var progWrap = box.querySelector('.audio-progress');
+  var progFill = box.querySelector('.audio-progress-fill');
+
+  var audio = new Audio();
+  audio.preload = 'metadata';
+  audio.src = src;
+
+  var iconPlay  = '<path d="M8 5v14l11-7z"/>';
+  var iconPause = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+
+  audio.addEventListener('loadedmetadata', function(){
+    timeEl.textContent = '0:00 / ' + formatTime(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', function(){
+    if (audio.duration) {
+      progFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      timeEl.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+    }
+  });
+
+  audio.addEventListener('play', function(){
+    box.classList.add('playing');
+    iconSVG.innerHTML = iconPause;
+    document.querySelectorAll('audio').forEach(function(a){ if (a !== audio) a.pause(); });
+  });
+  audio.addEventListener('pause', function(){
+    box.classList.remove('playing');
+    iconSVG.innerHTML = iconPlay;
+  });
+  audio.addEventListener('ended', function(){
+    box.classList.remove('playing');
+    iconSVG.innerHTML = iconPlay;
+    progFill.style.width = '0%';
+    timeEl.textContent = '0:00 / ' + formatTime(audio.duration);
+  });
+
+  playBtn.addEventListener('click', function(){
+    if (audio.paused) audio.play().catch(function(){});
+    else audio.pause();
+  });
+
+  progWrap.addEventListener('click', function(e){
+    var rect = progWrap.getBoundingClientRect();
+    var pct = (e.clientX - rect.left) / rect.width;
+    if (audio.duration) audio.currentTime = pct * audio.duration;
+  });
+});
+
+updateUI();
+</script>
+</body>
+</html>
